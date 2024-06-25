@@ -31,13 +31,46 @@
         <p class="typography-text-base md:typography-text-lg">
           {{ t('homepage.banner.moto3') }}
         </p>
-        <div class="flex flex-col md:flex-row gap-4 mt-6">
+        <div class="flex flex-col md:flex-row gap-4 mt-6 eigeneindex">
           <SfButton size="lg"> {{ t('homepage.banner.orderNow') }}</SfButton>
           <SfButton size="lg" variant="secondary" class="bg-white"> {{ t('homepage.banner.showMore') }}</SfButton>
         </div>
       </div>
     </div>
   </div>
+
+
+  <LazyHydrate when-visible>
+        <SfCarousel class="carousel" :settings="{ peek: 16, breakpoints: { 1023: { peek: 0, perView: 2 } } }">
+          <template #prev="{go}">
+            <SfArrow
+              aria-label="prev"
+              class="sf-arrow--left sf-arrow--long"
+              @click="go('prev')"
+            />
+          </template>
+          <template #next="{go}">
+            <SfArrow
+              aria-label="next"
+              class="sf-arrow--right sf-arrow--long"
+              @click="go('next')"
+            />
+          </template>
+          <SfCarouselItem class="carousel__item" v-for="(product, i) in products" :key="i">
+            <SfProductCard
+              :title="product.title"
+              :image="product.image"
+              :regular-price="product.price.regular"
+              :max-rating="product.rating.max"
+              :score-rating="product.rating.score"
+              :show-add-to-cart-button="true"
+              :is-on-wishlist="product.isInWishlist"              
+              class="carousel__item__product"              
+            />
+          </SfCarouselItem>
+        </SfCarousel>
+    </LazyHydrate>
+
   <div class="max-w-screen-3xl mx-auto md:px-6 lg:px-10">
     <div class="flex flex-wrap gap-4 lg:gap-6 lg:flex-no-wrap justify-center my-10">
       <div
@@ -139,6 +172,8 @@ const getSizeForViewport = (sizes: Sizes) => {
   return sizes[breakpoint];
 };
 
+
+
 watch(
   () => categoryTree.value,
   async () => {
@@ -147,6 +182,70 @@ watch(
   },
   { immediate: true },
 );
+
+
+
+const products = ref([
+      {
+        title: 'Cream Beach Bag',
+        image: '/homepage/productA.webp',
+        price: { regular: '50.00 $' },
+        rating: { max: 5, score: 4 },
+        isInWishlist: true
+      },
+      {
+        title: 'Cream Beach Bag',
+        image: '/homepage/productB.webp',
+        price: { regular: '50.00 $' },
+        rating: { max: 5, score: 4 },
+        isInWishlist: false
+      },
+      {
+        title: 'Cream Beach Bag',
+        image: '/homepage/productC.webp',
+        price: { regular: '50.00 $' },
+        rating: { max: 5, score: 4 },
+        isInWishlist: false
+      },
+      {
+        title: 'Cream Beach Bag',
+        image: '/homepage/productA.webp',
+        price: { regular: '50.00 $' },
+        rating: { max: 5, score: 4 },
+        isInWishlist: false
+      },
+      {
+        title: 'Cream Beach Bag',
+        image: '/homepage/productB.webp',
+        price: { regular: '50.00 $' },
+        rating: { max: 5, score: 4 },
+        isInWishlist: false
+      },
+      {
+        title: 'Cream Beach Bag',
+        image: '/homepage/productC.webp',
+        price: { regular: '50.00 $' },
+        rating: { max: 5, score: 4 },
+        isInWishlist: false
+      },
+      {
+        title: 'Cream Beach Bag',
+        image: '/homepage/productA.webp',
+        price: { regular: '50.00 $' },
+        rating: { max: 5, score: 4 },
+        isInWishlist: false
+      },
+      {
+        title: 'Cream Beach Bag',
+        image: '/homepage/productB.webp',
+        price: { regular: '50.00 $' },
+        rating: { max: 5, score: 4 },
+        isInWishlist: false
+      }
+    ]);
+
+
+
 const displayDetails = computed(() => {
   return [
     {
