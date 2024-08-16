@@ -1,5 +1,5 @@
 <template>
-  <div class="relative min-h-[600px]">
+  <div class="relative min-h-[600px]" data-plim="123123123">
     <div class="absolute w-full h-full z-[-1]">
       <img
         :src="background.image"
