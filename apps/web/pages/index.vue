@@ -7,7 +7,6 @@
         :height="getSizeForViewport(background.sizes).height"
         alt="Hero background"
         class="absolute top-0 left-0 w-full h-full object-cover"
-        loading="lazy"
       />
     </div>
     <div class="md:flex md:flex-row-reverse md:justify-center max-w-[1536px] mx-auto md:min-h-[600px]">
@@ -18,7 +17,6 @@
           :height="getSizeForViewport(headPhones.sizes).height"
           alt="Headphones"
           class="h-full object-cover object-left"
-          loading="lazy"
         />
       </div>
       <div class="p-4 md:p-10 md:max-w-[768px] md:flex md:flex-col md:justify-center md:items-start md:basis-2/4">
@@ -31,46 +29,13 @@
         <p class="typography-text-base md:typography-text-lg">
           {{ t('homepage.banner.moto3') }}
         </p>
-        <div class="flex flex-col md:flex-row gap-4 mt-6 eigeneindex">
-          <SfButton size="lg"> {{ t('homepage.banner.orderNow') }}</SfButton>
-          <SfButton size="lg" variant="secondary" class="bg-white"> {{ t('homepage.banner.showMore') }}</SfButton>
+        <div class="flex flex-col md:flex-row gap-4 mt-6">
+          <UiButton size="lg"> {{ t('homepage.banner.orderNow') }}</UiButton>
+          <UiButton size="lg" variant="secondary" class="bg-white"> {{ t('homepage.banner.showMore') }}</UiButton>
         </div>
       </div>
     </div>
   </div>
-
-
-  <LazyHydrate when-visible>
-        <SfCarousel class="carousel" :settings="{ peek: 16, breakpoints: { 1023: { peek: 0, perView: 2 } } }">
-          <template #prev="{go}">
-            <SfArrow
-              aria-label="prev"
-              class="sf-arrow--left sf-arrow--long"
-              @click="go('prev')"
-            />
-          </template>
-          <template #next="{go}">
-            <SfArrow
-              aria-label="next"
-              class="sf-arrow--right sf-arrow--long"
-              @click="go('next')"
-            />
-          </template>
-          <SfCarouselItem class="carousel__item" v-for="(product, i) in products" :key="i">
-            <SfProductCard
-              :title="product.title"
-              :image="product.image"
-              :regular-price="product.price.regular"
-              :max-rating="product.rating.max"
-              :score-rating="product.rating.score"
-              :show-add-to-cart-button="true"
-              :is-on-wishlist="product.isInWishlist"              
-              class="carousel__item__product"              
-            />
-          </SfCarouselItem>
-        </SfCarousel>
-    </LazyHydrate>
-
   <div class="max-w-screen-3xl mx-auto md:px-6 lg:px-10">
     <div class="flex flex-wrap gap-4 lg:gap-6 lg:flex-no-wrap justify-center my-10">
       <div
@@ -120,7 +85,7 @@
               {{ details.description }}
             </p>
             <NuxtLink to="/">
-              <SfButton class="!bg-black hover:!bg-white hover:!text-black">{{ details.buttonText }}</SfButton>
+              <UiButton class="!bg-black hover:!bg-white hover:!text-black">{{ details.buttonText }}</UiButton>
             </NuxtLink>
           </div>
           <img
@@ -149,7 +114,6 @@
 </template>
 
 <script lang="ts" setup>
-import { SfButton } from '@storefront-ui/vue';
 const viewport = useViewport();
 const { t } = useI18n();
 const { data: categoryTree } = useCategoryTree();
@@ -172,8 +136,6 @@ const getSizeForViewport = (sizes: Sizes) => {
   return sizes[breakpoint];
 };
 
-
-
 watch(
   () => categoryTree.value,
   async () => {
@@ -182,70 +144,6 @@ watch(
   },
   { immediate: true },
 );
-
-
-
-const products = ref([
-      {
-        title: 'Cream Beach Bag',
-        image: '/homepage/productA.webp',
-        price: { regular: '50.00 $' },
-        rating: { max: 5, score: 4 },
-        isInWishlist: true
-      },
-      {
-        title: 'Cream Beach Bag',
-        image: '/homepage/productB.webp',
-        price: { regular: '50.00 $' },
-        rating: { max: 5, score: 4 },
-        isInWishlist: false
-      },
-      {
-        title: 'Cream Beach Bag',
-        image: '/homepage/productC.webp',
-        price: { regular: '50.00 $' },
-        rating: { max: 5, score: 4 },
-        isInWishlist: false
-      },
-      {
-        title: 'Cream Beach Bag',
-        image: '/homepage/productA.webp',
-        price: { regular: '50.00 $' },
-        rating: { max: 5, score: 4 },
-        isInWishlist: false
-      },
-      {
-        title: 'Cream Beach Bag',
-        image: '/homepage/productB.webp',
-        price: { regular: '50.00 $' },
-        rating: { max: 5, score: 4 },
-        isInWishlist: false
-      },
-      {
-        title: 'Cream Beach Bag',
-        image: '/homepage/productC.webp',
-        price: { regular: '50.00 $' },
-        rating: { max: 5, score: 4 },
-        isInWishlist: false
-      },
-      {
-        title: 'Cream Beach Bag',
-        image: '/homepage/productA.webp',
-        price: { regular: '50.00 $' },
-        rating: { max: 5, score: 4 },
-        isInWishlist: false
-      },
-      {
-        title: 'Cream Beach Bag',
-        image: '/homepage/productB.webp',
-        price: { regular: '50.00 $' },
-        rating: { max: 5, score: 4 },
-        isInWishlist: false
-      }
-    ]);
-
-
-
 const displayDetails = computed(() => {
   return [
     {
@@ -304,7 +202,7 @@ const displayDetails = computed(() => {
       description: t('homepage.displayDetails.detail3.description'),
       buttonText: t('homepage.displayDetails.detail3.buttonText'),
       reverse: false,
-      backgroundColor: 'bg-secondary-200',
+      backgroundColor: 'bg-secondary-50',
       sizes: {
         lg: {
           width: '358',

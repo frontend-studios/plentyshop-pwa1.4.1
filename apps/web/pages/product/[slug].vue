@@ -17,16 +17,11 @@
           <NuxtLazyHydrate when-visible>
             <ProductAccordion v-if="product" :product="product" />
           </NuxtLazyHydrate>
-          <NuxtLazyHydrate when-visible>
-            <ReviewsAccordion
-              v-if="product"
-              :product="product"
-              :review-average-text="reviewGetters.getAverageRating(productReviewAverage, 'tenth')"
-              :review-average-stars="reviewGetters.getAverageRating(productReviewAverage, 'half')"
-              :total-reviews="reviewGetters.getTotalReviews(productReviewAverage)"
-              @on-list-change="fetchProductReviewAverage(Number(productId))"
-            />
-          </NuxtLazyHydrate>
+          <ReviewsAccordion
+            v-if="product"
+            :product="product"
+            :total-reviews="reviewGetters.getTotalReviews(productReviewAverage)"
+          />
         </section>
       </div>
       <section class="mx-4 mt-28 mb-20">
@@ -37,46 +32,48 @@
         </NuxtLazyHydrate>
       </section>
     </NarrowContainer>
+
+    <UiReviewModal />
   </NuxtLayout>
 </template>
 
 <script setup lang="ts">
-import { type Product, productGetters, reviewGetters } from '@plentymarkets/shop-api';
-
-const { data: categoryTree } = useCategoryTree();
-const { setProductMetaData } = useStructuredData();
-const route = useRoute();
-const { selectVariation } = useProducts();
-const { buildProductLanguagePath } = useLocalization();
-const { addModernImageExtensionForGallery } = useModernImage();
+import { Product, productGetters, reviewGetters } from '@plentymarkets/shop-api';
 
 definePageMeta({
   layout: false,
+  path: '/:slug*_:itemId',
 });
 
+const route = useRoute();
+const { setCurrentProduct } = useProducts();
+const { buildProductLanguagePath } = useLocalization();
+const { addModernImageExtensionForGallery } = useModernImage();
 const { productParams, productId } = createProductParams(route.params);
-const { data: product, fetchProduct, setTitle, generateBreadcrumbs, breadcrumbs } = useProduct(productId);
-const { data: productReviewAverage, fetchProductReviewAverage } = useProductReviewAverage(productId);
+const { data: product, fetchProduct, setProductMeta, setBreadcrumbs, breadcrumbs } = useProduct(productId);
+const { data: productReviewAverage, fetchProductReviewAverage } = useProductReviewAverage(Number(productId));
 const { fetchProductReviews } = useProductReviews(Number(productId));
-if (process.server) {
+
+await fetchProduct(productParams);
+setCurrentProduct(product.value || ({} as Product));
+setProductMeta();
+
+async function fetchReviews() {
+  const productVariationId = productGetters.getVariationId(product.value);
   await Promise.all([
-    fetchProduct(productParams),
+    fetchProductReviews(Number(productId), productVariationId),
     fetchProductReviewAverage(Number(productId)),
-    fetchProductReviews(Number(productId)),
   ]);
-  setProductMetaData(product.value, categoryTree.value[0]);
-} else {
-  await Promise.all([fetchProduct(productParams), fetchProductReviewAverage(Number(productId))]);
 }
-selectVariation(productParams.variationId ? product.value : ({} as Product));
-setTitle();
-generateBreadcrumbs();
+await fetchReviews();
+
+setBreadcrumbs();
+
 // eslint-disable-next-line unicorn/expiring-todo-comments
 /* TODO: This should only be temporary.
  *  It changes the url of the product page while on the page and switching the locale.
  *  Should be removed when the item search is refactored.
  */
-
 watch(
   () => product.value.texts.urlPath,
   (value, oldValue) => {
