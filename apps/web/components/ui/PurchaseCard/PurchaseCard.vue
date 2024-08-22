@@ -1,7 +1,5 @@
 <template>
-
-<span class="dump m-5 hidden product"> {{ product }}</span>
-
+  <span class="dump m-5 hidden product"> {{ product }}</span>
 
   <form
     @submit.prevent="handleAddToCart()"
@@ -78,7 +76,7 @@
 
     <BundleOrderItems v-if="product.bundleComponents" :product="product" />
     <OrderProperties :product="product" />
-    
+
     <ProductAttributes :product="product" />
 
     <GraduatedPriceList :product="product" :count="quantitySelectorValue" />

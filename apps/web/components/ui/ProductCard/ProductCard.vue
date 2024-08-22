@@ -1,6 +1,9 @@
 <template>
-  <div class="product-item border border-neutral-200 rounded-md hover:shadow-lg flex flex-col" data-testid="product-card" data-plim="12">
-
+  <div
+    class="product-item border border-neutral-200 rounded-md hover:shadow-lg flex flex-col"
+    data-testid="product-card"
+    data-plim="12"
+  >
     <div class="relative overflow-hidden">
       <UiBadges
         :class="['absolute', isFromWishlist ? 'mx-2' : 'm-2']"
@@ -41,14 +44,15 @@
       <SfLink :tag="NuxtLink" :to="productPath" class="no-underline text-center min-h-[60px]" variant="secondary">
         {{ name }}
       </SfLink>
-      <div class="flex items-center pt-1 gap-1" 
-          :class="{ 'mb-2': !productGetters.getShortDescription(product), 'opacity-0': ratingCount === 0 }">
-          <SfRating size="xs" :half-increment="true" :value="rating ?? 0" :max="5" />
-          <SfCounter size="xs">{{ ratingCount }}</SfCounter>        
+      <div
+        class="flex items-center pt-1 gap-1"
+        :class="{ 'mb-2': !productGetters.getShortDescription(product), 'opacity-0': ratingCount === 0 }"
+      >
+        <SfRating size="xs" :half-increment="true" :value="rating ?? 0" :max="5" />
+        <SfCounter size="xs">{{ ratingCount }}</SfCounter>
       </div>
 
       <div
-        
         class="block py-2 font-normal typography-text-xs text-neutral-700 text-justify whitespace-pre-line break-words min-h-[48px]"
       >
         <span class="line-clamp-3 shortDescription">
@@ -56,11 +60,10 @@
         </span>
       </div>
 
-        
       <p class="text-xs availability-preview text-center" :class="'availability-' + product.variation.availability.id">
         <SfIconLocalShipping class="text-xs" /> {{ product.variation.availability.names.name }}
       </p>
-      
+
       <LowestPrice :product="product" />
       <div v-if="showBasePrice" class="mb-2">
         <BasePriceInLine :base-price="basePrice" :unit-content="unitContent" :unit-name="unitName" />
@@ -71,13 +74,13 @@
             {{ t('account.ordersAndReturns.orderDetails.priceFrom') }}
           </span>
           <span :class="{ 'text-red-700': oldPrice && oldPrice !== mainPrice }">
-            {{ n(cheapestPrice ?? mainPrice, 'currency') }}</span>
-          <span :class="{ 'text-red-700': oldPrice && oldPrice !== mainPrice }" v-if="showNetPrices">{{ t('asterisk') }} </span>
+            {{ n(cheapestPrice ?? mainPrice, 'currency') }}</span
+          >
+          <span :class="{ 'text-red-700': oldPrice && oldPrice !== mainPrice }" v-if="showNetPrices"
+            >{{ t('asterisk') }}
+          </span>
         </span>
-        <span
-          v-if="oldPrice && oldPrice !== mainPrice"
-          class="typography-text-sm text-neutral-500 line-through"
-        >
+        <span v-if="oldPrice && oldPrice !== mainPrice" class="typography-text-sm text-neutral-500 line-through">
           {{ n(oldPrice, 'currency') }}
         </span>
       </div>
@@ -106,7 +109,14 @@
 
 <script setup lang="ts">
 import { CategoryTreeItem, productGetters } from '@plentymarkets/shop-api';
-import { SfLink, SfIconShoppingCart, SfLoaderCircular, SfRating, SfCounter, SfIconLocalShipping } from '@storefront-ui/vue';
+import {
+  SfLink,
+  SfIconShoppingCart,
+  SfLoaderCircular,
+  SfRating,
+  SfCounter,
+  SfIconLocalShipping,
+} from '@storefront-ui/vue';
 import type { ProductCardProps } from '~/components/ui/ProductCard/types';
 
 const localePath = useLocalePath();
