@@ -1,5 +1,13 @@
 {
   "homepage": {
+    "heroSubHeadline": "Subheadline",
+    "heroHeadline": "Design trifft Mehrsprachigkeit",
+    "heroCTABtnText": "Call-To-Action Text",
+    "heroCTALinkTo": "#Call-To-Action Link",
+    "heroImage": "https://picsum.photos/seed/picsum/1366/500",
+    "catSubHeadline": "wird als zweites gelesen",
+    "catHeadline": "Beste Kategorie die wo gibt",
+    "catShowAll": "Alle Artikel anzeigen",
     "banner": {
       "moto1": "Fühle die Musik",
       "moto2": "Neue Wireless Pro",
@@ -30,6 +38,12 @@
         "buttonText": "Jetzt entdecken"
       }
     }
+  },
+  "header": {
+    "usp1": "kostenloser Versand",
+    "usp2": "sichere Bezahlung",
+    "usp3": "14 Tage Rückgabegarantie",
+    "usp4": "Premium Quantity"
   },
   "billing": {
     "heading": "Rechnungsadresse",

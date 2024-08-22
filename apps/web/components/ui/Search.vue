@@ -1,5 +1,5 @@
 <template>
-  <form ref="referenceRef" role="search" class="relative" @submit.prevent="handleSubmit">
+  <form ref="referenceRef" role="search" class="relative max-w-[520px]" @submit.prevent="handleSubmit">
     <SfInput
       ref="inputReference"
       v-model="inputModel"
@@ -65,3 +65,4 @@ watch(inputModel, () => {
   }
 });
 </script>
+

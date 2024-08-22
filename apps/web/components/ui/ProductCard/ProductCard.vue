@@ -1,5 +1,6 @@
 <template>
-  <div class="border border-neutral-200 rounded-md hover:shadow-lg flex flex-col" data-testid="product-card">
+  <div class="product-item border border-neutral-200 rounded-md hover:shadow-lg flex flex-col" data-testid="product-card" data-plim="12">
+
     <div class="relative overflow-hidden">
       <UiBadges
         :class="['absolute', isFromWishlist ? 'mx-2' : 'm-2']"
@@ -31,42 +32,51 @@
       <slot name="wishlistButton">
         <WishlistButton
           square
-          class="absolute bottom-0 right-0 mr-2 mb-2 bg-white ring-1 ring-inset ring-neutral-200 !rounded-full"
+          class="absolute top-0 right-0 mr-2 mb-2 bg-white ring-1 ring-inset ring-neutral-200 !rounded-full"
           :product="product"
         />
       </slot>
     </div>
     <div class="p-2 border-t border-neutral-200 typography-text-sm flex flex-col flex-auto">
-      <SfLink :tag="NuxtLink" :to="productPath" class="no-underline" variant="secondary">
+      <SfLink :tag="NuxtLink" :to="productPath" class="no-underline text-center min-h-[60px]" variant="secondary">
         {{ name }}
       </SfLink>
-      <div class="flex items-center pt-1 gap-1" :class="{ 'mb-2': !productGetters.getShortDescription(product) }">
-        <SfRating size="xs" :half-increment="true" :value="rating ?? 0" :max="5" />
-        <SfCounter size="xs">{{ ratingCount }}</SfCounter>
+      <div class="flex items-center pt-1 gap-1" 
+          :class="{ 'mb-2': !productGetters.getShortDescription(product), 'opacity-0': ratingCount === 0 }">
+          <SfRating size="xs" :half-increment="true" :value="rating ?? 0" :max="5" />
+          <SfCounter size="xs">{{ ratingCount }}</SfCounter>        
       </div>
+
       <div
-        v-if="productGetters.getShortDescription(product)"
-        class="block py-2 font-normal typography-text-xs text-neutral-700 text-justify whitespace-pre-line break-words"
+        
+        class="block py-2 font-normal typography-text-xs text-neutral-700 text-justify whitespace-pre-line break-words min-h-[48px]"
       >
-        <span class="line-clamp-3">
+        <span class="line-clamp-3 shortDescription">
           {{ productGetters.getShortDescription(product) }}
         </span>
       </div>
+
+        
+      <p class="text-xs availability-preview text-center" :class="'availability-' + product.variation.availability.id">
+        <SfIconLocalShipping class="text-xs" /> {{ product.variation.availability.names.name }}
+      </p>
+      
       <LowestPrice :product="product" />
       <div v-if="showBasePrice" class="mb-2">
         <BasePriceInLine :base-price="basePrice" :unit-content="unitContent" :unit-name="unitName" />
       </div>
-      <div class="flex flex-col-reverse items-start md:flex-row md:items-center mt-auto">
-        <span class="block pb-2 font-bold typography-text-sm" data-testid="product-card-vertical-price">
+      <div class="flex flex-wrap flex-col-reverse items-center justify-end mb-3">
+        <span class="block font-bold typography-text-sm" data-testid="product-card-vertical-price">
           <span v-if="!productGetters.canBeAddedToCartFromCategoryPage(product)" class="mr-1">
             {{ t('account.ordersAndReturns.orderDetails.priceFrom') }}
           </span>
-          <span>{{ n(cheapestPrice ?? mainPrice, 'currency') }}</span>
-          <span v-if="showNetPrices">{{ t('asterisk') }} </span>
+          <span :class="{ 'text-red-700': oldPrice && oldPrice !== mainPrice }">
+            {{ n(cheapestPrice ?? mainPrice, 'currency') }}</span>
+          <span :class="{ 'text-red-700': oldPrice && oldPrice !== mainPrice }" v-if="showNetPrices">{{ t('asterisk') }} </span>
         </span>
         <span
           v-if="oldPrice && oldPrice !== mainPrice"
-          class="typography-text-sm text-neutral-500 line-through md:ml-3 md:pb-2"
+          class="typography-text-sm text-neutral-500 line-through"
         >
           {{ n(oldPrice, 'currency') }}
         </span>
@@ -74,7 +84,7 @@
       <UiButton
         v-if="productGetters.canBeAddedToCartFromCategoryPage(product)"
         size="sm"
-        class="min-w-[80px] w-fit"
+        class="min-w-[80px] w-fit mx-auto"
         data-testid="add-to-basket-short"
         @click="addWithLoader(Number(productGetters.getId(product)))"
         :disabled="loading"
@@ -87,7 +97,7 @@
           {{ t('addToCartShort') }}
         </span>
       </UiButton>
-      <UiButton v-else type="button" :tag="NuxtLink" :to="productPath" size="sm" class="w-fit">
+      <UiButton v-else type="button" :tag="NuxtLink" :to="productPath" size="sm" class="w-fit mx-auto">
         <span>{{ t('showOptions') }}</span>
       </UiButton>
     </div>
@@ -96,7 +106,7 @@
 
 <script setup lang="ts">
 import { CategoryTreeItem, productGetters } from '@plentymarkets/shop-api';
-import { SfLink, SfIconShoppingCart, SfLoaderCircular, SfRating, SfCounter } from '@storefront-ui/vue';
+import { SfLink, SfIconShoppingCart, SfLoaderCircular, SfRating, SfCounter, SfIconLocalShipping } from '@storefront-ui/vue';
 import type { ProductCardProps } from '~/components/ui/ProductCard/types';
 
 const localePath = useLocalePath();
