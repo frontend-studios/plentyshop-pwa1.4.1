@@ -309,6 +309,7 @@
   "category": "Category",
   "imageOfSth": "Image of {name}",
   "categories": {
+    "FSSaving": "EN Sie sparen:",
     "howToBuy": {
       "label": "Order process",
       "subcategories": {

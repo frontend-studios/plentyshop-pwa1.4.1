@@ -2,14 +2,37 @@
   <NarrowContainer class="mb-20 px-4 md:px-0" data-testid="category-layout">
     <h1 class="my-10 font-bold typography-headline-3 md:typography-headline-2">{{ title }}</h1>
 
-    <span class="dump hidden productsCatalog"> {{ productsCatalog }}</span>
+    <template v-for="categoryTreeID in categoryTree">
+      <template v-if="categoryTreeID.id == productsCatalog.category.id">
+        <template v-if="categoryTreeID.childCount > 0">
+          <div class="nav-wrapper flex items-start">
+            <template v-for="catChildren in categoryTreeID.children">
+              <div class="nav-item flex justify-center h-100 bg-white flex-col mr-2 border border-neutral-200">
+                <a :href="currentUrl + '/' + catChildren.details[0].nameUrl">
+                  <img
+                    :src="'https://fes-themes.plentymarkets-cloud01.com/documents/' + catChildren.details[0].image2Path"
+                    class="max-w-full h-full mx-auto object-contain"
+                  />
+                  <div class="nav-text flex align-center px-2 py-1 bg-slate-50">
+                    <span>{{ catChildren.details[0].name }}</span>
+                  </div>
+                </a>
+              </div>
+            </template>
+          </div>
+        </template>
+      </template>
+    </template>
 
-    <span class="dump hidden categoryID"> {{ productsCatalog.category.id }}</span>
+    <div v-if="productsCatalog.category.details[0].imagePath">
+      <img
+        :src="'https://fes-themes.plentymarkets-cloud01.com/documents/' + productsCatalog.category.details[0].imagePath"
+        class="max-w-full h-auto mx-auto"
+      />
+    </div>
 
-    <img
-      :src="'https://fes-themes.plentymarkets-cloud01.com/documents/' + productsCatalog.category.details[0].imagePath"
-      class="max-w-full h-auto mx-auto"
-    />
+    <!-- Verwenden der stripHtml Methode, um den Text ohne HTML-Tags anzuzeigen -->
+    <p class="my-20">{{ stripHtml(productsCatalog.category.details[0].description) }}</p>
 
     <div class="md:flex gap-6" data-testid="category-page-content">
       <CategorySidebar :is-open="isOpen" @close="close">
@@ -31,7 +54,7 @@
         </div>
         <section
           v-if="products"
-          class="grid grid-cols-1 2xs:grid-cols-2 gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-3 3xl:grid-cols-4 mb-10 md:mb-5"
+          class="grid grid-cols-1 2xs:grid-cols-2 gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-4 3xl:grid-cols-4 mb-10 md:mb-5"
           data-testid="category-grid"
         >
           <NuxtLazyHydrate when-visible v-for="(product, index) in products" :key="productGetters.getId(product)">
@@ -75,13 +98,12 @@
 </template>
 
 <script setup lang="ts">
-const { fetchProducts, data: productsCatalog, productsPerPage, loading } = useProducts();
-const { data: categoryTree } = useCategoryTree();
-
 import type { Product } from '@plentymarkets/shop-api';
 import { productGetters } from '@plentymarkets/shop-api';
 import { SfIconTune, useDisclosure } from '@storefront-ui/vue';
 import type { CategoryPageContentProps } from '~/components/CategoryPageContent/types';
+
+const { fetchProducts, data: productsCatalog, productsPerPage, loading } = useProducts();
 
 withDefaults(defineProps<CategoryPageContentProps>(), {
   itemsPerPage: 24,
@@ -109,4 +131,22 @@ const actualPrice = (product: Product): number => {
 
   return 0;
 };
+
+const { data: categoryTree } = useCategoryTree();
+
+// Get URL Start
+import { useRoute } from 'vue-router'; // Import the useRoute hook from vue-router
+const route = useRoute();
+const currentUrl = computed(() => route.fullPath);
+// Get URL Ende
+
+// Methode zum Entfernen von HTML-Tags aus einem String
+function stripHtml(html: string): string {
+  if (typeof document !== 'undefined') {
+    const div = document.createElement('div');
+    div.innerHTML = html;
+    return div.textContent || div.innerText || '';
+  }
+  return ''; // Wenn `document` nicht verfügbar ist (z. B. bei SSR), geben wir einen leeren String zurück.
+}
 </script>

@@ -309,6 +309,7 @@
   "category": "Kategorie",
   "imageOfSth": "Bild von {name}",
   "categories": {
+    "FSSaving": "Sie sparen:",
     "howToBuy": {
       "label": "Bestellvorgang",
       "subcategories": {

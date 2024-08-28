@@ -66,6 +66,9 @@
     </div>
 
     <!-- Brauche Category id 486 -->
+
+    {{ categoryTree }}
+
     <NuxtLazyHydrate when-visible>
       <section class="max-w-screen-2xl mx-auto relative w-full mb-3 py-5">
         <a href="" class="typography-text-lg text-primary-500 hover:underline">{{ t('homepage.catShowAll') }}</a>

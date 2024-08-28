@@ -2,13 +2,14 @@
   <UiButton
     variant="tertiary"
     size="sm"
+    :noClass="true"
     :aria-label="
       isWishlistItem(variationId)
         ? t('removeProductFromWishlist', { label: productName })
         : t('addProductToWishlist', { label: productName })
     "
-    :class="{ 'p-[0.9rem]': !isCloseButton }"
-    class="m-2"
+    class=""
+    :class="{ added: isWishlistItem(variationId) }"
     :disabled="wishlistLoading"
     @click="onWishlistClick"
     data-testid="wishlist-trigger"
@@ -27,6 +28,9 @@
 import type { WishlistButtonProps } from '~/components/WishlistButton/types';
 import { SfIconFavorite, SfIconFavoriteFilled, SfLoaderCircular, SfIconClose } from '@storefront-ui/vue';
 import { productGetters } from '@plentymarkets/shop-api';
+import { ref, computed, toRefs } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useWishlist } from '~/composables/useWishlist'; // Beispiel, passe den Pfad entsprechend an
 
 const props = withDefaults(defineProps<WishlistButtonProps>(), { quantity: 1, discard: false });
 const { product, quantity, discard } = toRefs(props);

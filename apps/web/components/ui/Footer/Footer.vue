@@ -25,6 +25,16 @@
           </SfListItem>
         </ul>
       </div>
+      <div class="min-w-[25%] xs:min-w-[50%] flex flex-col">
+        <div class="text-lg font-medium leading-7 text-neutral-900">Eigenes Menü</div>
+        <nav>
+          <ul class="ml-4">
+            <li v-for="category in categoryTree" :key="category.id">
+              <a :href="`/${category.details[0].nameUrl}`">{{ category.details[0].name }}</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
     </div>
     <hr />
     <div class="bg-neutral-900" data-testid="section-bottom">
@@ -41,6 +51,8 @@
 import { SfLink, SfListItem } from '@storefront-ui/vue';
 import { categories, companyName } from '~/mocks';
 import type { FooterProps } from './types';
+
+const { data: categoryTree } = useCategoryTree();
 
 const { simplifiedFooter } = withDefaults(defineProps<FooterProps>(), { simplifiedFooter: false });
 

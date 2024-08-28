@@ -41,7 +41,7 @@
 
         <ProductPrice :product="product" />
 
-        <div class="mb-4 font-normal typography-text-sm whitespace-pre" data-testid="product-description">
+        <div class="mb-4 font-normal typography-text-sm" data-testid="product-description">
           {{ productGetters.getShortDescription(product) }}
         </div>
 
@@ -54,6 +54,7 @@
 
         <VariationProperties :product="product" />
       </div>
+
       <div class="py-8 px-10">
         <div class="mb-8">
           <p class="font-medium text-base">{{ t('quickCheckout.cartContains', cartItemsCount) }}</p>
@@ -86,6 +87,12 @@
           <PayPalExpressButton class="w-full text-center" type="CartPreview" />
         </div>
       </div>
+    </div>
+
+    <div class="quick-checkout-modal">
+      <ProductRecommendedProducts :category-id="productGetters.getCategoryIds(product)[0]"></ProductRecommendedProducts>
+
+      {{ productGetters }}
     </div>
   </UiModal>
 </template>

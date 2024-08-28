@@ -105,7 +105,14 @@
                     {{ categoryTreeGetters.getName(node) }}
                   </SfListItem>
                 </ul>
+                <img
+                  v-if="node.details[0].image2Path"
+                  :src="'https://fes-themes.plentymarkets-cloud01.com/documents/' + node.details[0].image2Path"
+                  class=""
+                  :alt="categoryTreeGetters.getName(node)"
+                />
               </template>
+
               <div v-else>
                 <SfListItem
                   :tag="NuxtLink"
@@ -115,6 +122,13 @@
                 >
                   {{ categoryTreeGetters.getName(node) }}
                 </SfListItem>
+                <img
+                  v-if="node.details[0].image2Path"
+                  :src="'https://fes-themes.plentymarkets-cloud01.com/documents/' + node.details[0].image2Path"
+                  class=""
+                  :alt="categoryTreeGetters.getName(node)"
+                />
+
                 <ul class="mt-2">
                   <li v-for="child in node.children" :key="child.id">
                     <SfListItem
